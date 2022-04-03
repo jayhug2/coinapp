@@ -1,6 +1,8 @@
 import Router from "./Router.tsx";
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import Header from './Header';
+import { darktheme, lighttheme } from './theme';
+import { useState } from "react";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -35,6 +37,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 menu, ol, ul {
   list-style: none;
@@ -54,10 +57,6 @@ table {
 * {
   box-sizing: border-box;
 }
-body {
-  font-family: 'Source Sans Pro', sans-serif;
-  background-color: #222;
-}
 a {
   text-decoration: none;
   color: inherit;
@@ -65,11 +64,16 @@ a {
 `
 
 function App() {
+  const [isDark, setIsDark] = useState(true);
+  const changeTheme = () => setIsDark((current) => !current);
+  console.log(isDark);
   return (
     <>
-    <GlobalStyle />
-    <Header/>
-    <Router />
+      <GlobalStyle />
+    <ThemeProvider theme={ isDark? darktheme : lighttheme}>
+      <Header toggleTheme={changeTheme} isDark={isDark}/>
+      <Router />
+    </ThemeProvider>
     </>
   );
 }

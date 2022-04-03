@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
       <App />
       </BrowserRouter>
     </QueryClientProvider>

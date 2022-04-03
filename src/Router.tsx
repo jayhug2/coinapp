@@ -7,7 +7,7 @@ function Router(){
         
             <Routes>
                 <Route path={`/`} element={<Coins/>}/>
-                <Route path={`/detail`} element={<Coin />}/>
+                <Route path={`/detail/:id`} element={<Coin />}/>
             </Routes>
     )
 }

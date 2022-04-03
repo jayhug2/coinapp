@@ -13,24 +13,28 @@ const Headermenu = styled.header`
   & h2{
     font-size: 2rem;
     font-weight: bold;
-    color: #fff;
+    color: ${props => props.theme.textColor};
     font-style : italic;
     & b{
       color: #ff0000;
     }
   }
   & span{
-    color: #fff;
+    color: ${props => props.theme.toggleColor};
     font-size: 2rem;
   }
 `
+interface tg{
+  toggleTheme: () => void
+  isDark : boolean
+}
 
 
-function Header () {
+function Header ({toggleTheme, isDark }:tg) {
   return(
     <Headermenu>
       <Link to={`/`}><h2>Today <b>Coins</b></h2></Link>
-      <span><FaSun /></span>
+      <span onClick={toggleTheme}>{isDark?<FaSun /> : <FaMoon />}</span>
     </Headermenu>
   )
 

@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 
 const Container = styled.div`
   width: 100%;
+  background-color: ${props => props.theme.bgColor}
 `
 const Nav = styled.nav`
   height: 60vh;
@@ -42,7 +43,7 @@ const CoinList = styled.ul`
   display: grid;
   grid-template-columns : 1fr 1fr 1fr;
   list-style: none;
-  color: #fff;
+  
   text-align: center;
 
   @media screen and (max-width:1000px){
@@ -54,13 +55,14 @@ const CoinList = styled.ul`
 `
 const CoinItem = styled.li`
   border-radius:5px;
+  color: ${props => props.theme.textColor};
   padding: 10px 0;
   margin: 20px;
   line-height: 40px;
   box-shadow : 0px 0px 10px 2px #666;
+  font-weight: bold;
   & h3{
     font-size: 20px;
-    font-weight: bold;
     & img{
       width:30px;
       height: 30px;
@@ -131,7 +133,7 @@ function Coins() {
           <Title>
             <h1>Today<br/><b>Coins</b></h1>
             <p>오늘의 가치를 담는 코인 정보 사이트</p>
-            <Link to={`/detail`}><ViewDetail>View Details</ViewDetail></Link>
+            <Link to={`/detail/btc-bitcoin`}><ViewDetail>View Details</ViewDetail></Link>
           </Title>
         </Nav>
         {isLoading 
@@ -140,13 +142,15 @@ function Coins() {
             <CoinList>        
               {data?.slice(0,102).map((coin) => {
                 return (
-                  <CoinItem key={coin.id}>
+                  <Link to={`detail/${coin.id}`} key={coin.id}>
+                  <CoinItem>
                     <h3><img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`} alt={coin.name}/>{coin.name}</h3>
-                    <p>{`$ ${Number(coin.quotes.USD.ath_price).toFixed(3)}`}</p>
+                    <p>{`$ ${Number(coin.quotes.USD.price).toFixed(3)}`}</p>
                     <p style={coin.quotes.USD.percent_change_24h <0 ? {color:"#06f"} : {color:"red"}}>
                       {`Changed last 24H : ${coin.quotes.USD.percent_change_24h}%`}
                     </p>
                   </CoinItem>
+                  </Link>
                 )
               })}
         </CoinList>

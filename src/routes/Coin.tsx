@@ -1,19 +1,24 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { cointickers } from "../api";
+import { useParams, Link } from 'react-router-dom';
+import Price from "../components/Price";
+import Chart from "../components/Chart";
 
 const Container = styled.div`
   width: 100%;
   height: auto;
   display: flex;
+  background-color: ${props => props.theme.bgColor}
 `
 const Leftpart = styled.div`
-  width: 25%;
-  height: 100vh;
+  width: 30%;
+  height: 120vh;
   padding-top:10vh;
+  
 `
 const Rightpart = styled(Leftpart)`
-  width: 75%;
+  width: 70%;
 `
 const Loader = styled.div`
   width: 100%;
@@ -30,6 +35,13 @@ const CoinContainer = styled.ul`
   padding: 30px 50px;
   font-weight: bold;
   font-size: 18px;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #ccc;
+  }
 `
 const CoinList = styled.li`
   width: 100%;
@@ -37,9 +49,10 @@ const CoinList = styled.li`
   background-color: #fff;
   text-align: center;
   margin: 10px 0;
-  border-radius: 5px;
   position: relative;
+  border-radius: 5px;
   cursor: pointer;
+  box-sizing: border-box;
   & img{
     width: 30px; height: 30px;
     position: absolute;
@@ -84,6 +97,10 @@ interface ICoin {
 
 function Coin() {
   const {isLoading, data} = useQuery<ICoin[]>("allCoins", cointickers);
+
+  const { id } = useParams()
+
+  
     return (
       <>
         { isLoading 
@@ -94,20 +111,23 @@ function Coin() {
               <CoinContainer>
                 {data?.slice(0,102).map((coin) => {
                   return (
-                    <CoinList key={coin.id}>
+                    <Link to={`/detail/${coin.id}`} key={coin.id}>
+                    <CoinList style={ id===coin.id? { border : "5px solid red"} : { border : "5px solid #fff"}}>
                       <img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`} alt={coin.name}/>
                       {coin.name}
                     </CoinList>
+                    </Link>
                   )
                 })}
               </CoinContainer>
             </Leftpart>
-            <Rightpart></Rightpart>
+            <Rightpart>
+              <Price coinId={id as string}></Price>
+              <Chart coinId={id as string}></Chart>
+            </Rightpart>
           </Container>
           )
         }
-      
-      
       </>
     )
 }
